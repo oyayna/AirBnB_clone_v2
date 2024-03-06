@@ -39,9 +39,7 @@ class DBStorage:
         HBNB_MYSQL_DB = getenv("HBNB_MYSQL_DB")
         HBNB_ENV = getenv("HBNB_ENV")
         self.__engine = create_engine(
-            "mysql+mysqldb://{}:{}@{}/{}".format(
-                HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB
-            ),
+            f"mysql+mysqldb://{HBNB_MYSQL_USER}:{HBNB_MYSQL_PWD}@{HBNB_MYSQL_HOST}/{HBNB_MYSQL_DB}",
             pool_pre_ping=True,
         )
 
@@ -55,12 +53,12 @@ class DBStorage:
             for c in classes.values():
                 objs = self.__session.query(c).all()
                 for obj in objs:
-                    key = obj.__class__.__name__ + "." + obj.id
+                    key = f"{obj.__class__.__name__}.{obj.id}"
                     dct[key] = obj
         else:
             objs = self.__session.query(cls).all()
             for obj in objs:
-                key = obj.__class__.__name__ + "." + obj.id
+                key = f"{obj.__class__.__name__}.{obj.id}"
                 dct[key] = obj
         return dct
 
