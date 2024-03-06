@@ -12,8 +12,6 @@ from models.state import State
 from models.user import User
 from os import getenv
 
-if getenv("HBNB_TYPE_STORAGE") == "db":
-    from models.place import place_amenity
 
 classes = {
     "User": User,
@@ -39,7 +37,9 @@ class DBStorage:
         HBNB_MYSQL_DB = getenv("HBNB_MYSQL_DB")
         HBNB_ENV = getenv("HBNB_ENV")
         self.__engine = create_engine(
-            f"mysql+mysqldb://{HBNB_MYSQL_USER}:{HBNB_MYSQL_PWD}@{HBNB_MYSQL_HOST}/{HBNB_MYSQL_DB}",
+            "mysql+mysqldb://{}:{}@{}/{}".format(
+                HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB
+            ),
             pool_pre_ping=True,
         )
 
@@ -53,12 +53,12 @@ class DBStorage:
             for c in classes.values():
                 objs = self.__session.query(c).all()
                 for obj in objs:
-                    key = f"{obj.__class__.__name__}.{obj.id}"
+                    key = obj.__class__.__name__ + "." + obj.id
                     dct[key] = obj
         else:
             objs = self.__session.query(cls).all()
             for obj in objs:
-                key = f"{obj.__class__.__name__}.{obj.id}"
+                key = obj.__class__.__name__ + "." + obj.id
                 dct[key] = obj
         return dct
 
