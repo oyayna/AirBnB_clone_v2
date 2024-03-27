@@ -5,23 +5,31 @@ from models import storage_type
 from models.city import City
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import storage
-import os
+
 
 class State(BaseModel, Base):
-    """State class"""
+    """State class / table model"""
 
     __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="all, delete", backref="state")
-
-    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+    if storage_type == "db":
+        name = Column(String(128), nullable=False)
+        cities = relationship(
+            "City", backref="state", cascade="all, delete, delete-orphan"
+        )
+    else:
+        name = ""
 
         @property
         def cities(self):
-            """إرجاع قائمة المدن مرتبطة بالولاية"""
-            cities_list = []
-            for city in storage.all(City).values():
+            from models import storage
+
+            """returns the list of City instances with state_id
+                equals the current State.id
+                FileStorage relationship between State and City
+            """
+            related_cities = []
+            cities = storage.all(City)
+            for city in cities.values():
                 if city.state_id == self.id:
-                    cities_list.append(city)
-            return cities_list
+                    related_cities.append(city)
+            return related_cities
