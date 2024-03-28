@@ -29,7 +29,7 @@ def display_c_text(text):
     """
     Displays "C " followed by the value of the text variable
     """
-    return "C {}".format(text.replace("_", " "))
+    return f"C {text.replace("_", " ")}"
 
 
 @app.route("/python/", defaults={"text": "is cool"}, strict_slashes=False)
@@ -38,7 +38,7 @@ def display_python_text(text):
     """
     Displays "Python " followed by the value of the text variable
     """
-    return "Python {}".format(text.replace("_", " "))
+    return f"Python {text.replace("_", " ")}"
 
 
 @app.route("/number/<int:n>", strict_slashes=False)
@@ -46,7 +46,7 @@ def display_number(n):
     """
     Displays "n is a number" only if n is an integer
     """
-    return "{} is a number".format(n)
+    return f"{n} is a number"
 
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
