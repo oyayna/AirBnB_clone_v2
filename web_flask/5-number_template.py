@@ -24,7 +24,7 @@ def display_hbnb():
     return "HBNB"
 
 
-@app.route("/c/<text>", strict_slashes=False)
+@app.route("/c/<string:text>", strict_slashes=False)
 def display_c_text(text):
     """
     Displays "C " followed by the value of the text variable
@@ -33,7 +33,7 @@ def display_c_text(text):
 
 
 @app.route("/python/", defaults={"text": "is cool"}, strict_slashes=False)
-@app.route("/python/<text>", strict_slashes=False)
+@app.route("/python/<string:text>", strict_slashes=False)
 def display_python_text(text):
     """
     Displays "Python " followed by the value of the text variable
